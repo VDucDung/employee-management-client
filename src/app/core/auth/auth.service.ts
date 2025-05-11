@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { User, LoginRequest, LoginResponse } from '../models/user.model';
+import { LoginRequest, LoginResponse } from '../models/employee.model';
 import { environment } from '../../../environments/environments';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  private currentUserSubject = new BehaviorSubject<LoginResponse | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
   private apiUrl = environment.apiUrl;
@@ -21,13 +21,13 @@ export class AuthService {
     this.loadUserFromStorage();
   }
 
-  login(loginRequest: LoginRequest): Observable<User> {
+  login(loginRequest: LoginRequest): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>(`${this.apiUrl}/auth/login`, loginRequest)
       .pipe(
         map((response) => {
           // Lưu thông tin user và token vào localStorage
-          const user = { ...response.user, token: response.token };
+          const user = { ...response, token: response.token };
           localStorage.setItem('currentUser', JSON.stringify(user));
           localStorage.setItem('token', response.token);
 
@@ -57,7 +57,7 @@ export class AuthService {
     return !!this.currentUserSubject.value;
   }
 
-  get currentUserValue(): User | null {
+  get currentUserValue(): LoginResponse | null {
     return this.currentUserSubject.value;
   }
 

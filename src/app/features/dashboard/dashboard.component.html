@@ -1,9 +1,125 @@
 <div class="dashboard-container">
-  <h1>Dashboard</h1>
-  <div *ngIf="currentUser">
-    <p>Xin chào, {{ currentUser.fullName }}</p>
-    <p>Vai trò: {{ currentUser.role }}</p>
-    <button mat-raised-button color="warn" (click)="logout()">Đăng xuất</button>
+  <header class="dashboard-header">
+    <div class="logo-container">
+      <h1>Employee Management</h1>
+    </div>
+    <div class="user-menu">
+      <span>{{ currentUser?.fullName }}</span>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <nav>
+        <ul>
+          <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
+          <li><a routerLink="/employees" routerLinkActive="active">Employees</a></li>
+          <li><a routerLink="/departments" routerLinkActive="active">Departments</a></li>
+          <li><a routerLink="/attendance" routerLinkActive="active">Attendance</a></li>
+          <li *ngIf="isAdmin"><a routerLink="/reports" routerLinkActive="active">Reports</a></li>
+          <li *ngIf="isAdmin"><a routerLink="/settings" routerLinkActive="active">Settings</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <h2>Dashboard</h2>
+
+      <div *ngIf="loading" class="loading-spinner">
+        Loading...
+      </div>
+
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-icon employee-icon">👥</div>
+          <div class="stat-info">
+            <h3>Employees</h3>
+            <p class="stat-value">{{ employeeCount }}</p>
+          </div>
+          <a routerLink="/employees" class="stat-link">See all</a>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon department-icon">🏢</div>
+          <div class="stat-info">
+            <h3>Departments</h3>
+            <p class="stat-value">{{ departmentCount }}</p>
+          </div>
+          <a routerLink="/departments" class="stat-link">See all</a>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon attendance-icon">📊</div>
+          <div class="stat-info">
+            <h3>Attendance Today</h3>
+            <p class="stat-value">{{ attendanceToday }}</p>
+          </div>
+          <a routerLink="/attendance" class="stat-link">View details</a>
+        </div>
+      </div>
+
+      <section class="dashboard-section">
+        <div class="section-header">
+          <h3>Recently Added Employees</h3>
+          <a routerLink="/employees" class="view-all">See all</a>
+        </div>
+
+        <div class="data-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Hire Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let employee of recentEmployees">
+                <td>{{ employee.fullName }} </td>
+                <td>{{ employee.email }}</td>
+                <td>{{ employee.department?.name }}</td>
+                <td>{{ employee.hireDate | date:'dd/MM/yyyy' }}</td>
+              </tr>
+              <tr *ngIf="recentEmployees.length === 0">
+                <td colspan="4" class="no-data">No recent employees</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="dashboard-section">
+        <div class="section-header">
+          <h3>Recent Attendance</h3>
+          <a routerLink="/attendance" class="view-all">See all</a>
+        </div>
+
+        <div class="data-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let attendance of recentAttendance">
+                <td>{{ attendance.employee?.fullName }}</td>
+                <td>{{ attendance.checkInTime | date:'HH:mm' }}</td>
+                <td>{{ attendance.checkInTime ? (attendance.checkOutTime | date:'HH:mm') : '-' }}</td>
+                <td>{{ attendance.notes || '-' }}</td>
+              </tr>
+              <tr *ngIf="recentAttendance.length === 0">
+                <td colspan="4" class="no-data">No attendance today</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
   </div>
 </div>
-

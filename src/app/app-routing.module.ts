@@ -17,11 +17,18 @@ const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'employees',
+    loadChildren: () =>
+      import('./features/employee/employee.module').then(
+        (m) => m.EmployeeModule
+      ),
+    canActivate: [authGuard],
+  },
+  {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full',
   },
-  // Route fallback - chuyển hướng về dashboard nếu không tìm thấy route
   {
     path: '**',
     redirectTo: 'dashboard',

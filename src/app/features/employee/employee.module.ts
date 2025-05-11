@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule } from '@angular/router';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { authGuard } from '../../core/auth/auth.guard';
+import { EmployeeComponent } from './employee.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -23,26 +22,20 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { LoginComponent } from './features/auth/login/login.component';
-import { DashboardComponent } from './features/dashboard/dashboard.component';
-import { EmployeeComponent } from './features/employee/employee.component';
-import { ConfirmDialogComponent } from './components/confirm/confirm-dialog.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: EmployeeComponent,
+    canActivate: [authGuard],
+  },
+];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    DashboardComponent,
-    EmployeeComponent,
-    ConfirmDialogComponent,
-  ],
+  declarations: [EmployeeComponent],
   imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    RouterModule,
-    BrowserModule,
-    AppRoutingModule,
+    CommonModule,
+    RouterModule.forChild(routes),
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
@@ -64,7 +57,5 @@ import { ConfirmDialogComponent } from './components/confirm/confirm-dialog.comp
     MatTableModule,
     MatToolbarModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class EmployeeModule {}
