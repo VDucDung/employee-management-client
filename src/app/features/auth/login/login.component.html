@@ -1,0 +1,39 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Đăng nhập</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="alert alert-danger" *ngIf="error">{{error}}</div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="Email">
+          <mat-error *ngIf="submitted && f['email'].errors">
+            <span *ngIf="f['email'].errors['required']">Email là bắt buộc</span>
+            <span *ngIf="f['email'].errors['email']">Email không hợp lệ</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mật khẩu</mat-label>
+          <input matInput type="password" formControlName="password" placeholder="Mật khẩu">
+          <mat-error *ngIf="submitted && f['password'].errors">
+            <span *ngIf="f['password'].errors['required']">Mật khẩu là bắt buộc</span>
+            <span *ngIf="f['password'].errors['minlength']">Mật khẩu phải có ít nhất 6 ký tự</span>
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+            <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+            <span *ngIf="!loading">Đăng nhập</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+

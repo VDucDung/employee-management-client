@@ -1,17 +1,18 @@
-import { Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from './core/auth/auth.guard';
 
-export const routes: Routes = [
+const routes: Routes = [
   {
     path: 'login',
     loadChildren: () =>
-      import('./features/auth/auth.routes').then((r) => r.AUTH_ROUTES),
+      import('./features/auth/auth.module').then((m) => m.AuthModule),
   },
   {
     path: 'dashboard',
     loadChildren: () =>
-      import('./features/dashboard/dashboard.routes').then(
-        (r) => r.DASHBOARD_ROUTES
+      import('./features/dashboard/dashboard.module').then(
+        (m) => m.DashboardModule
       ),
     canActivate: [authGuard],
   },
@@ -26,3 +27,9 @@ export const routes: Routes = [
     redirectTo: 'dashboard',
   },
 ];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+})
+export class AppRoutingModule {}

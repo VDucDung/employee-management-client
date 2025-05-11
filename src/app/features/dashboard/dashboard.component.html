@@ -1,0 +1,9 @@
+<div class="dashboard-container">
+  <h1>Dashboard</h1>
+  <div *ngIf="currentUser">
+    <p>Xin chào, {{ currentUser.fullName }}</p>
+    <p>Vai trò: {{ currentUser.role }}</p>
+    <button mat-raised-button color="warn" (click)="logout()">Đăng xuất</button>
+  </div>
+</div>
+
